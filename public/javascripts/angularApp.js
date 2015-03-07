@@ -22,8 +22,9 @@ angular.module('flapperNews', ['ui.router'])
 	'$scope', 
 	'posts', 
 	function($scope, posts) {
+	//second param posts is from factory. 	
   	$scope.posts = posts.posts;
-   
+   		
 
 	 $scope.addPost = function(){
 	 	if( !$scope.title || $scope.title === '' ) return;
@@ -35,7 +36,6 @@ angular.module('flapperNews', ['ui.router'])
 				  comments: [
 				    {author: 'Joe', body: 'Cool post!', upvotes: 0},
 				    {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0},
-				    {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
 				  ]
 				});
 		$scope.title='';
@@ -53,32 +53,36 @@ angular.module('flapperNews', ['ui.router'])
 
 .controller('PostsCtrl', [
 '$scope',
+'$stateParams',
 'posts',
-
-function($scope, posts) {
-	$scope.post = {title: 'hello' , link:'www.google.com'};
-	$scope.addComment = function() {
-		if ($scope.body === '') { return; }
-		posts.addComment(post._id, {
-			body: $scope.body,
-			author: 'user',
-		}).success(function(comment) {
-			$scope.post.comments.push(comment);
-		});
-		$scope.body = '';
-	};
-    $scope.incrementUpvotes = function (comment) {
-        comment.upvotes += 1;
-    };
-    $scope.incrementUpvotes = function (comment) {
-        posts.upvoteComment(post, comment);
-    };
+function($scope, $stateParams, posts){
+		// $scope.post = {title: 'hello' , link:'www.google.com'};
+		console.log($stateParams);
+		$scope.post = posts.posts[0];	
+			$scope.addComment = function(){
+				  if($scope.body === '') { return; }
+				  $scope.post.comments.push({
+				    body: $scope.body,
+				    author: 'user',
+				    upvotes: 0
+				  });
+				  $scope.body = '';
+				};
+		    $scope.incrementUpvotes = function (comment) {
+		        comment.upvotes += 1;
+		    };
+		    // $scope.incrementUpvotes = function (comment) {
+		    //     posts.upvoteComment(post, comment);
+		    // };
 }])
+
+
+
 
 .factory('posts',[function(){
 
 	var o = {
-		posts : []
+		posts : [{title:'hello' , link:'dsf', comments: []}]
 	};
 	return o;
 
